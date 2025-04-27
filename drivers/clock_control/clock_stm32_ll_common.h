@@ -42,6 +42,26 @@
 #define z_plli2s_r(v) LL_RCC_PLLI2SR_DIV_ ## v
 #define plli2sr(v) z_plli2s_r(v)
 
+/* Macros to fill up multiplication and division factors values */
+#define z_pllsai(v) LL_RCC_PLLSAIM_DIV_ ## v
+#define pllsaim(v) z_pllsai(v)
+
+#define z_pllsaip(v) LL_RCC_PLLSAIP_DIV_ ## v
+#define pllsaip(v) z_pllsaip(v)
+
+#define z_pllsaiq(v) LL_RCC_PLLSAIQ_DIV_ ## v
+#define pllsaiq(v) z_pllsaiq(v)
+
+#define z_pllsair(v) LL_RCC_PLLSAIR_DIV_ ## v
+#define pllsair(v) z_pllsair(v)
+
+#define z_pllsai_divq(v) LL_RCC_PLLSAIDIVQ_DIV_ ## v
+#define pllsaiqdiv(v) z_pllsai_divq(v)
+
+#define z_pllsai_divr(v) LL_RCC_PLLSAIDIVR_DIV_ ## v
+#define pllsairdiv(v) z_pllsai_divr(v)
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -56,6 +76,9 @@ void config_pll2(void);
 #endif
 #if defined(STM32_PLLI2S_ENABLED)
 void config_plli2s(void);
+#endif
+#if defined(STM32_PLLSAI_ENABLED)
+void config_pllsai(void);
 #endif
 void config_enable_default_clocks(void);
 void config_regulator_voltage(uint32_t hclk_freq);

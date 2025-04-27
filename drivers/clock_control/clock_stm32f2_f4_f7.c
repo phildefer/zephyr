@@ -169,6 +169,46 @@ void config_plli2s(void)
 
 #endif /* STM32_PLLI2S_ENABLED */
 
+#ifdef STM32_PLLSAI_ENABLED
+
+/**
+ * @brief Set up PLL SAI configuration
+ */
+__unused
+void config_pllsai(void)
+{
+	LL_RCC_PLLSAI_ConfigDomain_48M(get_pll_source(),
+				       pllsaim(STM32_PLLSAI_M_DIVISOR),
+				       STM32_PLLSAI_N_MULTIPLIER,
+				       pllsaip(STM32_PLLSAI_P_DIVISOR)
+					); 
+
+#if STM32_PLLSAI_QDIV_ENABLED
+	LL_RCC_PLLSAI_ConfigDomain_SAI(get_pll_source(),
+				       pllsaim(STM32_PLLSAI_M_DIVISOR),
+				       STM32_PLLSAI_N_MULTIPLIER,
+					   pllsaiq(STM32_PLLSAI_Q_DIVISOR),
+					   pllsaiqdiv(STM32_PLLSAI_Q_DIVISOR_Q)
+					);
+		/* There is a Q divider on the PLLSAI to configure the PLL48CK */
+#endif
+	
+
+#if STM32_PLLSAI_RDIV_ENABLED
+	LL_RCC_PLLSAI_ConfigDomain_LTDC(get_pll_source(), 
+						pllsaim(STM32_PLLSAI_M_DIVISOR),
+						STM32_PLLSAI_N_MULTIPLIER,
+						pllsair(STM32_PLLSAI_R_DIVISOR),
+						pllsairdiv(STM32_PLLSAI_R_DIVISOR_R)
+					);
+	/* There is a R divider on the PLLSAI to configure the LTDC (LCD-TFT) Clock */
+#endif
+}
+
+#endif /* STM32_PLLSAI_ENABLED */
+
+
+
 /**
  * @brief Activate default clocks
  */

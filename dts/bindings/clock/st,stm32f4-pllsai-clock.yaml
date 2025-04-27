@@ -1,0 +1,55 @@
+# Copyright (c) 2023, Linaro ltd
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  STM32F4xx PLL SAI.
+
+compatible: "st,stm32f4-pllsai-clock"
+
+include: [clock-controller.yaml, base.yaml]
+
+properties:
+  "#clock-cells":
+    const: 0
+
+  mul-n:
+    type: int
+    required: true
+    description: blabla
+
+  div-p:
+    type: int
+    description: blabla
+
+  div-q:
+    type: int
+    description: blabla
+    enum:
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+      - 15
+
+  div-r:
+    type: int
+    description: blabla
+
+  rdiv:
+    type: int
+    description: blabla
+
+  qdiv:
+    type: int
+    description: blabla   
+
+  

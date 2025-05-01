@@ -21,12 +21,10 @@
 #include <zephyr/pm/device_runtime.h>
 #include "i2c_ll_stm32.h"
 
-#if defined(CONFIG_DCACHE) && defined(CONFIG_I2C_STM32_V2_DMA)
 #include <zephyr/cache.h>
 #include <zephyr/linker/linker-defs.h>
 #include <zephyr/mem_mgmt/mem_attr.h>
 #include <zephyr/dt-bindings/memory-attr/memory-attr-arm.h>
-#endif
 
 #define LOG_LEVEL CONFIG_I2C_LOG_LEVEL
 #include <zephyr/logging/log.h>
@@ -195,10 +193,12 @@ static inline void msg_init(const struct device *dev, struct i2c_msg *msg,
 				/* Configure RX DMA */
 				data->dma_blk_cfg.source_address = LL_I2C_DMA_GetRegAddr(
 					cfg->i2c, LL_I2C_DMA_REG_DATA_RECEIVE);
+				data->dma_blk_cfg.source_addr_adj = DMA_ADDR_ADJ_NO_CHANGE;
 				data->dma_blk_cfg.dest_address = (uint32_t)msg->buf;
+				data->dma_blk_cfg.dest_addr_adj = DMA_ADDR_ADJ_INCREMENT;
 				data->dma_blk_cfg.block_size = msg->len;
 
-				if (configure_dma(&cfg->rx_dma, &data->dma_cfg,
+				if (configure_dma(&cfg->rx_dma, &data->dma_rx_cfg,
 						  &data->dma_blk_cfg) != 0) {
 					LOG_ERR("Problem setting up RX DMA");
 					return;
@@ -211,10 +211,13 @@ static inline void msg_init(const struct device *dev, struct i2c_msg *msg,
 					/* Configure TX DMA */
 					data->dma_blk_cfg.source_address =
 						(uint32_t)data->current.buf;
+					data->dma_blk_cfg.source_addr_adj = DMA_ADDR_ADJ_INCREMENT;
 					data->dma_blk_cfg.dest_address = LL_I2C_DMA_GetRegAddr(
 						cfg->i2c, LL_I2C_DMA_REG_DATA_TRANSMIT);
+					data->dma_blk_cfg.dest_addr_adj = DMA_ADDR_ADJ_NO_CHANGE;
 					data->dma_blk_cfg.block_size = msg->len;
-					if (configure_dma(&cfg->tx_dma, &data->dma_cfg,
+
+					if (configure_dma(&cfg->tx_dma, &data->dma_tx_cfg,
 							  &data->dma_blk_cfg) != 0) {
 						LOG_ERR("Problem setting up TX DMA");
 						return;
@@ -697,12 +700,14 @@ static bool buf_in_nocache(uintptr_t buf, size_t len_bytes)
 	}
 #endif /* CONFIG_NOCACHE_MEMORY */
 
+#ifdef CONFIG_MEM_ATTR
 	/* Check if buffer is in nocache memory region defined in DT */
 	buf_within_nocache = mem_attr_check_buf(
 		(void *)buf, len_bytes, DT_MEM_ARM(ATTR_MPU_RAM_NOCACHE)) == 0;
 	if (buf_within_nocache) {
 		return true;
 	}
+#endif /* CONFIG_MEM_ATTR */
 
 	/* Check if buffer is in RO region (Flash..) */
 	buf_within_nocache = (buf >= ((uintptr_t)__rodata_region_start)) &&

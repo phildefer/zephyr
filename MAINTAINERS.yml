@@ -291,6 +291,21 @@ Ambiq Platforms:
   labels:
     - "platform: Ambiq"
 
+AndesTech Platforms:
+  status: maintained
+  maintainers:
+    - jimmyzhe
+  collaborators:
+    - kevinwang821020
+  files:
+    - boards/andestech/
+    - drivers/*/*andes*
+    - dts/bindings/*/*andestech*
+    - dts/riscv/andes/
+    - soc/andestech/
+  labels:
+    - "platform: Andes Technology"
+
 BeagleBoard Platforms:
   status: maintained
   maintainers:
@@ -886,7 +901,6 @@ Demand Paging:
 Device Driver Model:
   status: maintained
   maintainers:
-    - gmarull
     - tbursztyka
   collaborators:
     - dcpleung
@@ -941,8 +955,6 @@ Devicetree:
     - include/zephyr/dt-bindings/dt-util.h
     - dts/binding-template.yaml
     - dts/bindings/base/
-  files-exclude:
-    - dts/common/nordic/
   labels:
     - "area: Devicetree"
   tests:
@@ -1034,9 +1046,9 @@ Documentation:
 Documentation Infrastructure:
   status: maintained
   maintainers:
-    - gmarull
     - kartben
   collaborators:
+    - gmarull
     - carlescufi
     - nashif
   files:
@@ -1051,8 +1063,8 @@ Documentation Infrastructure:
 Release Notes:
   status: maintained
   maintainers:
-    - fabiobaltieri
-    - kartben
+    - danieldegrasse
+    - dkalowsk
   collaborators:
     - kartben
   files:
@@ -1428,6 +1440,7 @@ Release Notes:
     - decsny
     - lmajewski
     - pdgendt
+    - clamattia
   files:
     - drivers/ethernet/
     - include/zephyr/dt-bindings/ethernet/
@@ -1685,10 +1698,11 @@ Release Notes:
     - drivers.memc
 
 "Drivers: MDIO":
-  status: odd fixes
+  status: maintained
+  maintainers:
+    - maass-hamburg
   collaborators:
     - decsny
-    - maass-hamburg
   files:
     - doc/hardware/peripherals/mdio.rst
     - drivers/mdio/
@@ -1822,7 +1836,6 @@ Release Notes:
 "Drivers: MFD":
   status: odd fixes
   collaborators:
-    - gmarull
     - aasinclair
   files:
     - drivers/mfd/
@@ -1933,8 +1946,8 @@ Release Notes:
     - samples.drivers.peci
 
 "Drivers: Pin Control":
-  status: maintained
-  maintainers:
+  status: odd fixes
+  collaborators:
     - gmarull
   files:
     - doc/hardware/pinctrl/
@@ -2392,8 +2405,6 @@ Input:
   status: maintained
   maintainers:
     - fabiobaltieri
-  collaborators:
-    - gmarull
   files:
     - doc/services/input/
     - drivers/input/
@@ -3192,6 +3203,20 @@ PHYTEC Platforms:
   labels:
     - "platform: PHYTEC"
 
+PMCI:
+  status: maintained
+  maintainers:
+    - teburd
+  collaborators:
+    - nashif
+    - inteljiangwe1
+    - kehintel
+  files:
+    - subsys/pmci/
+    - samples/modules/pmci/
+  labels:
+    - "area: PMCI"
+
 POSIX API layer:
   status: maintained
   maintainers:
@@ -3459,26 +3484,43 @@ ADI Platforms:
     - microbuilder
   files:
     - boards/adi/
+    - boards/shields/eval*ardz/
     - boards/shields/pmod_acl/
     - drivers/*/*max*
     - drivers/*/*max*/
     - drivers/dac/dac_ltc*
     - drivers/ethernet/eth_adin*
+    - drivers/ethernet/phy/phy_adin*
     - drivers/mdio/mdio_adin*
-    - drivers/regulator/regulator_adp5360*
     - drivers/sensor/adi/
+    - drivers/stepper/adi_tmc/
     - dts/arm/adi/
     - dts/bindings/*/adi,*
     - dts/bindings/*/lltc,*
     - dts/bindings/*/maxim,*
     - soc/adi/
+  files-regex:
+    - ^drivers/(adc|dac|gpio|mfd|regulator)/.*adp?\d+
   labels:
     - "platform: ADI"
+
+Bouffalolab Platforms:
+  status: maintained
+  maintainers:
+    - nandojve
+  files:
+    - boards/bflb/
+    - drivers/*/*bflb*
+    - dts/riscv/bflb/
+    - dts/bindings/*/bflb,*
+    - soc/bflb/
+  labels:
+    - "platform: bouffalolab"
 
 Broadcom Platforms:
   status: odd fixes
   files:
-    - dts/arm/broadcom/
+    - dts/*/broadcom/
     - soc/brcm/
     - boards/brcm/
 
@@ -3487,7 +3529,6 @@ GD32 Platforms:
   maintainers:
     - nandojve
   collaborators:
-    - gmarull
     - soburi
     - cameled
   files:
@@ -3852,6 +3893,7 @@ NXP Platforms (S32):
     - manuargue
   collaborators:
     - Dat-NguyenDuy
+    - congnguyenhuu
   files:
     - boards/nxp/*s32*/
     - boards/common/*nxp_s32*
@@ -3864,6 +3906,8 @@ NXP Platforms (S32):
     - include/zephyr/dt-bindings/*/nxp-s32*
     - include/zephyr/dt-bindings/*/nxp_s32*
     - include/zephyr/drivers/*/*nxp_s32*
+  files-exclude:
+    - boards/nxp/ucans32k1sic/
   labels:
     - "platform: NXP S32"
   description: NXP S32 platforms and S32-specific drivers
@@ -3906,10 +3950,13 @@ NXP Platforms (Robotics Products):
   maintainers:
     - bperseghetti
     - PetervdPerk-NXP
+  collaborators:
+    - manuargue
   files:
     - boards/nxp/vmu*/
     - boards/nxp/rddrone_fmuk66/
     - boards/nxp/mr_canhubk3/
+    - boards/nxp/ucans32k1sic/
   labels:
     - "platform: NXP Robotics"
   description: NXP Robotics Module Platform Products
@@ -3985,6 +4032,7 @@ nRF Platforms:
     - dts/bindings/*/nordic,*
     - tests/drivers/*/*nrf*/
     - snippets/nordic*/
+    - tests/boards/nrf/
   labels:
     - "platform: nRF"
 
@@ -4058,6 +4106,7 @@ Renesas RA Platforms:
   collaborators:
     - duynguyenxa
     - thaoluonguw
+    - thenguyenyf
   files:
     - boards/arduino/uno_r4/
     - boards/renesas/*ra*/
@@ -4088,7 +4137,6 @@ Renesas RZ Platforms:
     - dts/arm/renesas/rz/
     - dts/bindings/*/*rzt2m*
     - dts/bindings/*/*renesas,rz*
-    - soc/renesas/rzt2m/
     - soc/renesas/rz/
   labels:
     - "platforms: Renesas RZ"
@@ -4197,8 +4245,7 @@ Espressif Platforms:
     - drivers/*/*esp32*.c
     - boards/espressif/
     - soc/espressif/
-    - dts/xtensa/espressif/
-    - dts/riscv/espressif/
+    - dts/*/espressif/
     - dts/bindings/*/*esp32*
     - samples/boards/espressif/
     - tests/boards/espressif/
@@ -4457,8 +4504,13 @@ Task Watchdog:
 TDK Sensors:
   status: maintained
   maintainers:
+    - afontaine-invn
+    - rbuisson-invn
+  collaborators:
     - teburd
     - MaureenHelm
+    - sriccardi-invn
+    - gjabouley-invn
   files:
     - drivers/sensor/tdk/
   labels:
@@ -4902,6 +4954,15 @@ West:
   labels:
     - "platform: Microchip SAM"
 
+"West project: hal_bouffalolab":
+  status: maintained
+  maintainers:
+    - nandojve
+  files:
+    - modules/hal_bouffalolab/
+  labels:
+    - "platform: Bouffalo Lab"
+
 "West project: hal_cypress":
   status: maintained
   maintainers:
@@ -4944,7 +5005,6 @@ West:
   maintainers:
     - nandojve
   collaborators:
-    - gmarull
     - soburi
   files:
     - modules/hal_gigadevice/
@@ -5186,8 +5246,7 @@ West:
   collaborators:
     - nashif
     - inteljiangwe1
-  files:
-    - samples/modules/mctp/
+  files: []
   labels:
     - "area: MCTP"
 
@@ -5672,6 +5731,22 @@ Peregrine Platforms:
     - boards/peregrine/
   labels:
     - "platform: Peregrine"
+
+WCH Platforms:
+  status: maintained
+  maintainers:
+    - nzmichaelh
+    - kholia
+  collaborators:
+    - VynDragon
+  files:
+    - boards/wch/
+    - dts/riscv/wch/
+    - soc/wch/
+    - drivers/*/*wch*
+    - dts/bindings/*/wch,*
+  labels:
+    - "platform: WinChipHead"
 
 # This area is to be converted to a subarea
 Testing with Renode:

@@ -706,6 +706,12 @@ uint8_t ll_apto_get(uint16_t handle, uint16_t *apto)
 {
 	struct ll_conn *conn;
 
+#if defined(CONFIG_BT_CTLR_ISO)
+	if (IS_CIS_HANDLE(handle) || IS_SYNC_ISO_HANDLE(handle) || IS_ADV_ISO_HANDLE(handle)) {
+		return BT_HCI_ERR_CMD_DISALLOWED;
+	}
+#endif /* CONFIG_BT_CTLR_ISO */
+
 	conn = ll_connected_get(handle);
 	if (!conn) {
 		return BT_HCI_ERR_UNKNOWN_CONN_ID;
@@ -725,6 +731,12 @@ uint8_t ll_apto_get(uint16_t handle, uint16_t *apto)
 uint8_t ll_apto_set(uint16_t handle, uint16_t apto)
 {
 	struct ll_conn *conn;
+
+#if defined(CONFIG_BT_CTLR_ISO)
+	if (IS_CIS_HANDLE(handle) || IS_SYNC_ISO_HANDLE(handle) || IS_ADV_ISO_HANDLE(handle)) {
+		return BT_HCI_ERR_CMD_DISALLOWED;
+	}
+#endif /* CONFIG_BT_CTLR_ISO */
 
 	conn = ll_connected_get(handle);
 	if (!conn) {
@@ -2350,6 +2362,14 @@ void ull_conn_update_parameters(struct ll_conn *conn, uint8_t is_cu_proc, uint8_
 	switch (lll->role) {
 #if defined(CONFIG_BT_PERIPHERAL)
 	case BT_HCI_ROLE_PERIPHERAL:
+		/* Since LLL prepare doesn't get to run, accumulate window widening here */
+		lll->periph.window_widening_prepare_us += lll->periph.window_widening_periodic_us *
+							  (conn->llcp.prep.lazy + 1);
+		if (lll->periph.window_widening_prepare_us > lll->periph.window_widening_max_us) {
+			lll->periph.window_widening_prepare_us =
+				lll->periph.window_widening_max_us;
+		}
+
 		lll->periph.window_widening_prepare_us -=
 			lll->periph.window_widening_periodic_us * instant_latency;
 

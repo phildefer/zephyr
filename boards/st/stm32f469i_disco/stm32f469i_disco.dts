@@ -151,6 +151,13 @@
 	pinctrl-0 = <&i2c1_scl_pb8 &i2c1_sda_pb9>;
 	pinctrl-names = "default";
 	status = "okay";
+
+	ft5336: ft5336@38 {
+		compatible = "focaltech,ft5336";
+		reg = <0x38>;
+		int-gpios = <&gpioi 13 GPIO_ACTIVE_LOW>; // to check
+		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>; // to check
+	};
 };
 
 &spi2 {

@@ -367,7 +367,12 @@ static int stm32_ltdc_init(const struct device *dev)
 	}
 
 #if defined(CONFIG_SOC_SERIES_STM32F4X)
+	
+#if defined(STM32_PLLSAI_ENABLED)
+	// already configured through Device Tree
+#else
 	LL_RCC_PLLSAI_Disable();
+
 	LL_RCC_PLLSAI_ConfigDomain_LTDC(LL_RCC_PLLSOURCE_HSE,
 					LL_RCC_PLLSAIM_DIV_8,
 					192,
@@ -377,7 +382,8 @@ static int stm32_ltdc_init(const struct device *dev)
 	LL_RCC_PLLSAI_Enable();
 	while (LL_RCC_PLLSAI_IsReady() != 1) {
 	}
-#endif
+#endif // STM32_PLLSAI_ENABLED
+#endif // CONFIG_SOC_SERIES_STM32F4X
 
 #if defined(CONFIG_SOC_SERIES_STM32F7X)
 	LL_RCC_PLLSAI_Disable();
@@ -404,7 +410,7 @@ static int stm32_ltdc_init(const struct device *dev)
 
 #ifdef CONFIG_STM32_LTDC_DISABLE_FMC_BANK1
 	/* Clear MBKEN and MTYP[1:0] bits. */
-#ifdef CONFIG_SOC_SERIES_STM32F7X
+#ifdef CONFIG_SOC_SERIES_STM32F7X 
 	FMC_Bank1->BTCR[0] &= ~(0x0000000D);
 #else /* CONFIG_SOC_SERIES_STM32H7X */
 	FMC_Bank1_R->BTCR[0] &= ~(0x0000000D);

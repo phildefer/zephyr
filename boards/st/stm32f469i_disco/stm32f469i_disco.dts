@@ -59,16 +59,16 @@
 		gpio-map-mask = <0xffffffff 0xffffffc0>;
 		gpio-map-pass-thru = <0 0x3f>;
 		/* re-used from stm32 h743 */ 
-		gpio-map =  <4 0 &gpioh 6 0>,	/* TOUCH_INT */
+		gpio-map =  <4 0 &gpioj 5 0>,	/* TOUCH_INT */
 			   // <35 0 &gpioe 5 0>,	/* SCLK/MCLK */
 			   // <37 0 &gpioe 4 0>,	/* LRCLK */
 			   //<39 0 &gpioe 6 0>,	/* I2S */
-			   // <40 0 &gpiob 8 0>,	/* I2C1_SDA */
-			   // <44 0 &gpiob 9 0>,	/* I2C1_SCL */
+			   <40 0 &gpiob 9 0>,	/* I2C1_SDA */
+			   <44 0 &gpiob 8 0>,	/* I2C1_SCL */
 			   // <45 0 &gpioa 8 0>,	/* CEC_CLK */
 			   // <47 0 &gpiob 6 0>,	/* CEC */
 			   <49 0 &gpioj 2 0>,	/* DSI_TE */
-			   <53 0 &gpioj 3 0>,	/* LCD_BL_CTRL */
+			   <53 0 &gpioa 3 0>,	/* LCD_BL_CTRL */
 			   <57 0 &gpioh 7 0>;	/* DSI_RESET */
 	};
 
@@ -117,7 +117,7 @@
 };
 
 &pllsai {
-	mul-n = <417>;
+	mul-n = <266>;
 	div-p = <2>;
 	div-q = <7>;
 	div-r = <5>;
@@ -151,13 +151,6 @@
 	pinctrl-0 = <&i2c1_scl_pb8 &i2c1_sda_pb9>;
 	pinctrl-names = "default";
 	status = "okay";
-
-	ft5336: ft5336@38 {
-		compatible = "focaltech,ft5336";
-		reg = <0x38>;
-		int-gpios = <&gpioi 13 GPIO_ACTIVE_LOW>; // to check
-		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>; // to check
-	};
 };
 
 &spi2 {
@@ -196,17 +189,22 @@ zephyr_udc0: &usbotg_fs {
 
 // FMC & SDRAM
 &fmc {
-	pinctrl-0 = <&fmc_nbl0_pe0 &fmc_nbl1_pe1
+	pinctrl-0 = <&fmc_nbl0_pe0 &fmc_nbl1_pe1 &fmc_nbl2_pi4 &fmc_nbl3_pi5
 		     &fmc_sdclk_pg8 &fmc_sdnwe_pc0 &fmc_sdcke0_ph2
 		     &fmc_sdne0_ph3 &fmc_sdnras_pf11 &fmc_sdncas_pg15
 		     &fmc_a0_pf0 &fmc_a1_pf1 &fmc_a2_pf2 &fmc_a3_pf3 &fmc_a4_pf4
 		     &fmc_a5_pf5 &fmc_a6_pf12 &fmc_a7_pf13 &fmc_a8_pf14
-		     &fmc_a9_pf15 &fmc_a10_pg0 &fmc_a11_pg1 &fmc_a12_pg2 
+		     &fmc_a9_pf15 &fmc_a10_pg0 &fmc_a11_pg1 &fmc_a12_pg2
+			 &fmc_a14_pg4 &fmc_a15_pg5
 		     &fmc_d0_pd14 &fmc_d1_pd15
 		     &fmc_d2_pd0 &fmc_d3_pd1 &fmc_d4_pe7 &fmc_d5_pe8 &fmc_d6_pe9
 		     &fmc_d7_pe10 &fmc_d8_pe11 &fmc_d9_pe12 &fmc_d10_pe13
 		     &fmc_d11_pe14 &fmc_d12_pe15 &fmc_d13_pd8 &fmc_d14_pd9
-		     &fmc_d15_pd10>;
+		     &fmc_d15_pd10 &fmc_d16_ph8 &fmc_d17_ph9 &fmc_d18_ph10 
+			 &fmc_d19_ph11 &fmc_d20_ph12 &fmc_d21_ph13 &fmc_d22_ph14
+			 &fmc_d23_ph15 &fmc_d24_pi0 &fmc_d25_pi1 &fmc_d26_pi2
+			 &fmc_d27_pi3 &fmc_d28_pi6 &fmc_d29_pi7 &fmc_d30_pi9 
+			 &fmc_d31_pi10>;
 	pinctrl-names = "default";
 	status = "okay";
 
@@ -216,15 +214,15 @@ zephyr_udc0: &usbotg_fs {
 		status = "okay";
 		power-up-delay = <100>;
 		num-auto-refresh = <8>;
-		mode-register = <0x220>;
+		mode-register = <230>;
 		/*
 		 * Auto refresh command shall be issued every 15.625 us
 		 * and is calculated as ((15.625 * SDRAM_CLK_MHZ) - 20)
 		 * Note: SDRAM_CLK_MHZ = HCLK_MHZ / 2 (180 MHz)
 		 */
 		refresh-rate = <1386>;
-		bank@1 {
-			reg = <1>;
+		bank@0 {
+			reg = <0>;
 			st,sdram-control = <STM32_FMC_SDRAM_NC_8
 						STM32_FMC_SDRAM_NR_12
 						STM32_FMC_SDRAM_MWID_32
@@ -245,6 +243,8 @@ qsh_030_i2c: &i2c1 {
 	// clock-frequency = <I2C_BITRATE_FAST>;
 	status = "okay";
 };
+
+
 
 /* alias used by display shields */
 zephyr_mipi_dsi: &mipi_dsi {};

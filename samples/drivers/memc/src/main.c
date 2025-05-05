@@ -26,7 +26,7 @@
 #define MEMC_SIZE (DT_PROP(DT_ALIAS(psram0), size) / 8)
 #elif DT_HAS_COMPAT_STATUS_OKAY(st_stm32_fmc_sdram)
 #define MEMC_BASE 0xc0000000  // DT_PROP ....
-#define MEMC_SIZE (16*1024*1024) // (DT_PROP(DT_ALIAS(sram_ext), reg))
+#define MEMC_SIZE (8*1024*1024) // (DT_PROP(DT_ALIAS(sram_ext), reg))
 #else
 #error At least one driver should be selected!
 #endif

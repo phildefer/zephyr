@@ -40,8 +40,8 @@
 			reg = <0x40016800 0x400>;
 			interrupts = <88 0>, <89 0>;
 			interrupt-names = "ltdc", "ltdc_er";
-			clocks = <&rcc STM32_CLOCK(APB2, 26)>,
-			         <&rcc STM32_SRC_PLLSAI_R NO_SEL>; /* divisor after pllsai */
+			clocks = <&rcc STM32_CLOCK(APB2, 26)>; //,
+			         // <&rcc STM32_SRC_PLLSAI_R NO_SEL>; /* divisor after pllsai */
 			resets = <&rctl STM32_RESET(APB2, 26)>;
 			status = "disabled";
 		};

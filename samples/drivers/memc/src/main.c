@@ -28,6 +28,9 @@
 #define mspi_get_xip_address(controller) DT_REG_ADDR_BY_IDX(controller, 1)
 #define MEMC_BASE (void *)(mspi_get_xip_address(MSPI_BUS))
 #define MEMC_SIZE (DT_PROP(MEMC_DEV, size) / 8)
+#elif DT_HAS_COMPAT_STATUS_OKAY(st_stm32_fmc_sdram)
+#define MEMC_BASE DT_REG_ADDR(DT_ALIAS(sram_ext))
+#define MEMC_SIZE DT_REG_SIZE(DT_ALIAS(sram_ext))
 #else
 #error At least one driver should be selected!
 #endif
